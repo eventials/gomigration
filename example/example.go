@@ -3,7 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
-	mg "github.com/eventials/migration"
+	mg "github.com/eventials/gomigration"
 	"github.com/jmoiron/sqlx"
 )
 

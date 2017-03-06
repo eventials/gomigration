@@ -1,4 +1,4 @@
-package migration
+package gomigration
 
 type Method struct {
 	Id       string

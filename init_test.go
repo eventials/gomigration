@@ -1,4 +1,4 @@
-package migration
+package gomigration
 
 import (
 	"github.com/jmoiron/sqlx"
