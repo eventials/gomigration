@@ -4,12 +4,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.app.devel
-    working_dir: /go/src/github.com/eventials/migration
+    working_dir: /go/src/github.com/eventials/gomigration
     command: dockerize -wait tcp://db:5432 -timeout 60s go run example.go
     links:
      - db
     volumes:
-     - .:/go/src/github.com/eventials/migration
+     - .:/go/src/github.com/eventials/gomigration
     hostname: eventials-webhooks
   db:
     image: postgres:9.6
