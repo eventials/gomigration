@@ -12,7 +12,7 @@ func TestCreateMigrationTable(t *testing.T) {
 
 	storage.On("CreateMigrationTable")
 
-	migration := NewMigration(storage, "test-app")
+	migration := NewMigrationsTree(storage, "test-app")
 
 	assert.NotNil(t, migration)
 	storage.AssertExpectations(t)
@@ -24,7 +24,7 @@ func TestClearMigrationTable(t *testing.T) {
 	storage.On("CreateMigrationTable")
 	storage.On("DeleteMigrations", "clear-app")
 
-	migration := NewMigration(storage, "clear-app")
+	migration := NewMigrationsTree(storage, "clear-app")
 	migration.Clear()
 
 	storage.AssertExpectations(t)
@@ -35,7 +35,7 @@ func TestDuplicatedIds(t *testing.T) {
 
 	storage.On("CreateMigrationTable")
 
-	migration := NewMigration(storage, "test-app")
+	migration := NewMigrationsTree(storage, "test-app")
 
 	migration.Add("1", nil)
 	migration.Add("1", nil)
@@ -56,7 +56,7 @@ func TestInsertId(t *testing.T) {
 	storage.On("CreateMigrationTable")
 	storage.On("GetTransaction").Return(transaction)
 
-	migration := NewMigration(storage, "test-app")
+	migration := NewMigrationsTree(storage, "test-app")
 
 	assert.NotNil(t, migration)
 
@@ -84,7 +84,7 @@ func TestInsertIdFail(t *testing.T) {
 	storage.On("CreateMigrationTable")
 	storage.On("GetTransaction").Return(transaction)
 
-	migration := NewMigration(storage, "test-app")
+	migration := NewMigrationsTree(storage, "test-app")
 
 	assert.NotNil(t, migration)
 
@@ -113,7 +113,7 @@ func TestCallbackReturningError(t *testing.T) {
 	storage.On("CreateMigrationTable")
 	storage.On("GetTransaction").Return(transaction)
 
-	migration := NewMigration(storage, "test-app")
+	migration := NewMigrationsTree(storage, "test-app")
 
 	assert.NotNil(t, migration)
 
