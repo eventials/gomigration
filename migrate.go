@@ -8,13 +8,13 @@ import (
 
 type MigrationCallBack func(tx *sqlx.Tx) error
 
-type Migration interface {
+type MigrationsTree interface {
 	Add(id string, callback MigrationCallBack) *Node
 	Execute() error
 	Clear()
 }
 
-type MigrationImpl struct {
+type MigrationsTreeImpl struct {
 	trunk     *Node
 	storage   Storage
 	wg        *sync.WaitGroup
@@ -23,15 +23,15 @@ type MigrationImpl struct {
 	processed []string
 }
 
-func (m *MigrationImpl) Add(id string, callback MigrationCallBack) *Node {
+func (m *MigrationsTreeImpl) Add(id string, callback MigrationCallBack) *Node {
 	return m.trunk.Add(id, callback)
 }
 
-func (m *MigrationImpl) setup() {
+func (m *MigrationsTreeImpl) setup() {
 	m.storage.CreateMigrationTable()
 }
 
-func (m *MigrationImpl) callMethods(n *Node) {
+func (m *MigrationsTreeImpl) callMethods(n *Node) {
 	if n == nil {
 		return
 	}
@@ -92,7 +92,7 @@ func duplicatedIds(n *Node, duplicated map[string]bool) {
 	}
 }
 
-func (m *MigrationImpl) validate() error {
+func (m *MigrationsTreeImpl) validate() error {
 	duplicated := make(map[string]bool)
 	duplicatedIds(m.trunk, duplicated)
 	keys := getMapKeys(duplicated)
@@ -104,11 +104,11 @@ func (m *MigrationImpl) validate() error {
 	return nil
 }
 
-func (m *MigrationImpl) Clear() {
+func (m *MigrationsTreeImpl) Clear() {
 	m.storage.DeleteMigrations(m.appName)
 }
 
-func (m *MigrationImpl) Execute() error {
+func (m *MigrationsTreeImpl) Execute() error {
 	err := m.validate()
 
 	if err != nil {
@@ -128,8 +128,8 @@ func (m *MigrationImpl) Execute() error {
 	return nil
 }
 
-func NewMigration(storage Storage, appName string) Migration {
-	m := &MigrationImpl{
+func NewMigrationsTree(storage Storage, appName string) MigrationsTree {
+	m := &MigrationsTreeImpl{
 		storage: storage,
 		trunk:   &Node{nil, []Method{}},
 		wg:      &sync.WaitGroup{},
