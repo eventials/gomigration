@@ -5,7 +5,7 @@ Database migration library for Golang projects.
 Any added migration will be performed within an individual transaction, if it returns an error, they will be rolled back.
 All "trunk" migrations will be perfomed within an go routine, and his method will be sequentially executed.
 
-## Databases Support
+## Database Support
 
 - PostgreSQL
 
