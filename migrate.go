@@ -1,12 +1,12 @@
 package gomigration
 
 import (
+	"database/sql"
 	"fmt"
-	"github.com/jmoiron/sqlx"
 	"sync"
 )
 
-type MigrationCallBack func(tx *sqlx.Tx) error
+type MigrationCallBack func(tx *sql.Tx) error
 
 type MigrationsTree interface {
 	Add(id string, callback MigrationCallBack) *Node

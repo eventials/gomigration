@@ -1,9 +1,7 @@
 version: '2'
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile.app.devel
+    build: .
     working_dir: /go/src/github.com/eventials/gomigration
     command: dockerize -wait tcp://db:5432 -timeout 60s go run example.go
     links:

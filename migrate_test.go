@@ -1,10 +1,11 @@
 package gomigration
 
 import (
+	"database/sql"
 	"errors"
-	"github.com/jmoiron/sqlx"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestCreateMigrationTable(t *testing.T) {
@@ -62,7 +63,7 @@ func TestInsertId(t *testing.T) {
 
 	called := false
 
-	migration.Add("1", func(tx *sqlx.Tx) error {
+	migration.Add("1", func(tx *sql.Tx) error {
 		called = true
 		return nil
 	})
@@ -90,7 +91,7 @@ func TestInsertIdFail(t *testing.T) {
 
 	called := false
 
-	migration.Add("1", func(tx *sqlx.Tx) error {
+	migration.Add("1", func(tx *sql.Tx) error {
 		called = true
 		return nil
 	})
@@ -119,7 +120,7 @@ func TestCallbackReturningError(t *testing.T) {
 
 	called := false
 
-	migration.Add("1", func(tx *sqlx.Tx) error {
+	migration.Add("1", func(tx *sql.Tx) error {
 		called = true
 		return errors.New("Callback failed")
 	})

@@ -9,18 +9,6 @@
 			"revisionTime": "2016-10-29T20:57:26Z"
 		},
 		{
-			"checksumSHA1": "oLFrzmCQG3B4LykceMVzOsoOWBA=",
-			"path": "github.com/jmoiron/sqlx",
-			"revision": "f4076845477b10ac2453a16377a8383467aafe72",
-			"revisionTime": "2017-02-21T04:34:47Z"
-		},
-		{
-			"checksumSHA1": "xXjxKqs3ECyWO5zjIVb2qgj9rcU=",
-			"path": "github.com/jmoiron/sqlx/reflectx",
-			"revision": "f4076845477b10ac2453a16377a8383467aafe72",
-			"revisionTime": "2017-02-21T04:34:47Z"
-		},
-		{
 			"checksumSHA1": "FZem1OXCd+ogu1yeG11GMlGiGVA=",
 			"path": "github.com/lib/pq",
 			"revision": "ba5d4f7a35561e22fbdf7a39aa0070f4d460cfc0",
@@ -57,5 +45,5 @@
 			"revisionTime": "2017-01-30T11:31:45Z"
 		}
 	],
-	"rootPath": "github.com/eventials/migration"
+	"rootPath": "github.com/eventials/gomigration"
 }

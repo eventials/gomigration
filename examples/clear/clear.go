@@ -1,21 +1,23 @@
 package main
 
 import (
+	"database/sql"
+
 	"github.com/eventials/gomigration"
-	"github.com/jmoiron/sqlx"
+	"github.com/eventials/gomigration/postgres"
 )
 
 func main() {
-	storage := gomigration.NewPostgresStore("postgres://postgres:postgres@db/postgres?sslmode=disable")
+	storage := postgres.NewStorage("postgres://postgres:postgres@db/postgres?sslmode=disable")
 	migrations := gomigration.NewMigrationsTree(storage, "example-app")
 
-	trunk := migrations.Add("drop tables", func(tx *sqlx.Tx) error {
+	trunk := migrations.Add("drop tables", func(tx *sql.Tx) error {
 		_, err := tx.Exec(`DROP TABLE IF EXISTS languages;`)
 
 		return err
 	})
 
-	languages := trunk.Add("create tables", func(tx *sqlx.Tx) error {
+	languages := trunk.Add("create tables", func(tx *sql.Tx) error {
 		_, err := tx.Exec(`
 			CREATE TABLE languages (
 				id BIGSERIAL PRIMARY KEY,
@@ -26,7 +28,7 @@ func main() {
 		return err
 	})
 
-	languages.Add("insert default languages", func(tx *sqlx.Tx) error {
+	languages.Add("insert default languages", func(tx *sql.Tx) error {
 		_, err := tx.Exec(`
 			INSERT INTO languages (name) values ('assembly');
 			INSERT INTO languages (name) values ('go-lang');
@@ -37,7 +39,7 @@ func main() {
 		return err
 	})
 
-	languages.Add("added type column to langue table", func(tx *sqlx.Tx) error {
+	languages.Add("added type column to langue table", func(tx *sql.Tx) error {
 		_, err := tx.Exec(`ALTER TABLE languages ADD COLUMN type TEXT;`)
 
 		return err
