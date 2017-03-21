@@ -1,19 +1,30 @@
-package gomigration
+package postgres
 
 import (
-	"github.com/stretchr/testify/assert"
+	"os"
 	"sync"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
+
+var (
+	storage *Storage
+)
+
+func TestMain(m *testing.M) {
+	storage = NewStorage("postgres://postgres:postgres@db/postgres?sslmode=disable")
+	os.Exit(m.Run())
+}
 
 func ExistTable(table string) bool {
 	exists := false
-	err := db.Get(&exists, `SELECT EXISTS (
-   											SELECT 1
-   											FROM information_schema.tables 
-   											WHERE  table_schema = 'public'
-   											AND    table_name = $1
-   				);`, table)
+	err := storage.db.QueryRow(`SELECT EXISTS (
+                                            SELECT 1
+                                            FROM information_schema.tables 
+                                            WHERE  table_schema = 'public'
+                                            AND    table_name = $1
+                );`, table).Scan(&exists)
 
 	if err != nil {
 		panic(err)
@@ -24,8 +35,11 @@ func ExistTable(table string) bool {
 
 func ExistsId(appName string, id string) bool {
 	exists := false
-	err := db.Get(&exists, `SELECT EXISTS (SELECT 1 FROM migration WHERE app_name = $1 AND migration_id = $2)`,
-		appName, id)
+	err := storage.db.QueryRow(
+		`SELECT EXISTS (
+                         SELECT 1
+                           FROM migration
+                          WHERE app_name = $1 AND migration_id = $2)`, appName, id).Scan(&exists)
 
 	if err != nil {
 		panic(err)
@@ -55,8 +69,8 @@ func TestStorageInsertMigrationTable(t *testing.T) {
 	transaction.InsertId("teste", "teste")
 
 	exists := false
-	err := transaction.GetTx().Get(&exists, `SELECT EXISTS (SELECT 1 FROM migration WHERE app_name = $1 AND migration_id = $2)`,
-		"teste", "teste")
+	err := transaction.GetTx().QueryRow(
+		`SELECT EXISTS (SELECT 1 FROM migration WHERE app_name = $1 AND migration_id = $2)`, "teste", "teste").Scan(&exists)
 
 	if err != nil {
 		panic(err)

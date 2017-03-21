@@ -1,15 +1,17 @@
 package main
 
 import (
+	"database/sql"
+
 	"github.com/eventials/gomigration"
-	"github.com/jmoiron/sqlx"
+	"github.com/eventials/gomigration/postgres"
 )
 
 func main() {
-	storage := gomigration.NewPostgresStore("postgres://postgres:postgres@db/postgres?sslmode=disable")
+	storage := postgres.NewStorage("postgres://postgres:postgres@db/postgres?sslmode=disable")
 	migrations := gomigration.NewMigrationsTree(storage, "example-app")
 
-	db := migrations.Add("create languages table", func(tx *sqlx.Tx) error {
+	db := migrations.Add("create languages table", func(tx *sql.Tx) error {
 		_, err := tx.Exec(`
 			CREATE TABLE languages (
 				id BIGSERIAL PRIMARY KEY,
@@ -20,7 +22,7 @@ func main() {
 		return err
 	})
 
-	db.Add("insert default languages", func(tx *sqlx.Tx) error {
+	db.Add("insert default languages", func(tx *sql.Tx) error {
 		_, err := tx.Exec(`
 			INSERT INTO languages (name) values ('assembly');
 			INSERT INTO languages (name) values ('go-lang');

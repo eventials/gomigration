@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/eventials/gomigration"
+	"github.com/eventials/gomigration/postgres"
 )
 
 func main() {
-	storage := gomigration.NewPostgresStore("postgres://postgres:postgres@db/postgres?sslmode=disable")
+	storage := postgres.NewStorage("postgres://postgres:postgres@db/postgres?sslmode=disable")
 	storage.DropMigrationTable()
 }
