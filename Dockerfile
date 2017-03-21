@@ -6,5 +6,3 @@ RUN tar -C /usr/local/bin -xzvf dockerize-linux-amd64-v0.2.0.tar.gz
 
 RUN mkdir -p /go/src/github.com/eventials/gomigration
 WORKDIR /go/src/github.com/eventials/gomigration
-
-RUN go get -u github.com/kardianos/govendor
