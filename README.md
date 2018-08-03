@@ -7,6 +7,7 @@ All "trunk" migrations will be perfomed within an go routine, and his method wil
 
 ## Database Support
 
+- SQLite3
 - PostgreSQL
 
 ## Example
